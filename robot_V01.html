@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - collada - kinematics</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<link type="text/css" rel="stylesheet" href="main.css">
+	</head>
+	<body>
+		<div id="info">
+			<a href="https://threejs.org" target="_blank" rel="noopener">three.js</a> collada loader - kinematics<br/>
+			robot from <a href="https://github.com/rdiankov/collada_robots" target="_blank" rel="noopener">collada robots</a>
+		</div>
+		    <script type="importmap">
+        {
+            "imports": {
+                "three": "../build/three.module.js",
+                "OrbitControls": "https://unpkg.com/three@0.138.0/examples/jsm/controls/OrbitControls.js"
+            }
+        }
+		</script>
+		<script type="module">
+
+			import * as THREE from '../build/three.module.js';
+			import {
+    WebGLRenderer,
+    PerspectiveCamera,
+    Scene,
+    Mesh,
+    PlaneBufferGeometry,
+    ShadowMaterial,
+    DirectionalLight,
+    PCFSoftShadowMap,
+    sRGBEncoding,
+    Color,
+    AmbientLight,
+    Box3,
+    LoadingManager,
+    MathUtils,
+} from 'three';
+			import Stats from './jsm/libs/stats.module.js';
+			import { DragControls } from './jsm/controls/DragControls.js';
+			import { TWEEN } from './jsm/libs/tween.module.min.js';
+			import { ColladaLoader } from './jsm/loaders/ColladaLoader.js';
+			import { OrbitControls } from './jsm/controls/OrbitControls.js';
+			import { OBJLoader } from './jsm/loaders/OBJLoader.js';
+			import URDFLoader from '../../urdf-loaders-master/javascript/src/URDFLoader.js';
+			
+			let container, stats;
+
+			var camera, scene, renderer;
+			let particleLight;
+			
+
+			let kinematics;
+			let kinematicsTween; 
+			let kinematics01;
+			let kinematicsTween01; 
+			const tweenParameters = {};
+			
+			let box = new THREE.Mesh();
+			let newBox = new THREE.Mesh();
+			const group = new THREE.Group();
+			
+			let object;
+			var controls;
+			var link5Child;
+			let robot;
+			let finger;
+			init();
+				
+
+			function init() {
+			
+				var dae;
+				var dae01;
+				
+				
+				const loader = new ColladaLoader();
+				 loader.load( './models/collada/kawada-hironx.dae', function ( collada ) {
+				//loader.load( './models/collada/abb_irb52_7_120.dae', function ( collada ) {
+					dae = collada.scene;
+					
+					dae.traverse( function ( child ) {
+						if ( child.isMesh ) {
+							// model does not have normals
+							child.material.flatShading = true;
+						}
+					} );
+					
+					dae.scale.x = dae.scale.y = dae.scale.z = 3.0;
+					dae.position.x = dae.position.y = dae.position.z = 0.0;
+					//dae.updateMatrix();
+
+					kinematics = collada.kinematics;
+					
+					//scene.add(dae);
+					//scene.add(dae01);
+					
+					//setupTween();
+
+				} );	
+
+				loader.load( './models/collada/abb_irb52_7_120.dae', function ( collada ) {
+				
+					
+					
+					dae01 = collada.scene;
+					
+					dae01.traverse( function ( child01 ) {
+					
+					
+						//console.log(child01);
+						if ( child01.isMesh ) {
+						
+							if(child01.parent.name=="link_5"){
+								//link5Child = child01;
+								//child01.add(box);
+							}
+							child01.material.flatShading = true;
+							// model does not have normals
+							
+							
+						}
+					} );
+					dae01.scale.x = dae01.scale.y = dae01.scale.z = 3.0;
+					dae01.position.x = 0.0;
+					dae01.position.y = 0.0;
+					dae01.position.z = 4.0;
+					//dae01.updateMatrix();
+					
+
+					kinematics01 = collada.kinematics;
+					
+					
+					
+					//scene.add(dae);
+					//scene.add(dae01);
+					//animate();
+					//setupTween01();
+					animate();
+
+				} );
+				const manager = new LoadingManager();
+				const urdfloader = new URDFLoader(manager);
+				urdfloader.load('../../tm5/urdf/tm5.urdf', result => {
+			
+				robot = result;	
+				
+				robot.traverse( function ( child ) {
+						
+						if (child.name=='arm6' ) {
+							
+							// model does not have normals
+							console.log(child);
+							link5Child=child;
+						}
+					} );
+				//scene.add(robot);
+				});
+			
+				//scene.add(robot);
+				 manager.onLoad = () => {
+
+				robot.rotation.x = -Math.PI / 2;
+				robot.traverse(c => {
+				c.castShadow = true;
+				});
+				//robot.joints['j1'].setJointValue(MathUtils.degToRad(10));
+				//robot.joints['j5'].setJointValue(MathUtils.degToRad(30));
+				//robot.joints['j6'].setJointValue(MathUtils.degToRad(40));
+				robot.scale.x = robot.scale.y = robot.scale.z = 3.0;
+				robot.position.x = 1.0;
+				robot.position.y = 0.8;
+				robot.position.z = 0;
+				scene.add(robot);
+				
+				};
+				//const manager = new LoadingManager();
+				const loader1 = new URDFLoader( manager );
+				console.log(robot);
+				
+				loader1.load(
+				  '../../f7/urdf/f7.urdf',                    // The path to the URDF within the package OR absolute
+				  finger => {
+					finger.scale.x = finger.scale.y = finger.scale.z = 0.5;
+					// The robot is loaded!
+					finger.position.x = 0;
+					finger.position.z = 0.142;
+					finger.rotation.y = 0 ;
+					//finger.rotation.y = -Math.PI / 2;
+					link5Child.add( finger );
+
+				  }
+				);
+				
+				const loader001 = new OBJLoader();
+				// load a resource
+				loader001.load('models/obj/conveyor.obj',function ( object ) {
+						object.scale.x = 0.03;
+						object.scale.y = 0.025;
+						object.scale.z = 0.02;
+						
+						
+						object.position.x = 2.75;
+						object.position.y = 0;
+						object.position.z = 3.5;
+						
+						object.rotation.x = -1.57;
+						object.rotation.y = 0.00;
+						object.rotation.z = 1.56;
+
+						scene.add( object );
+				});
+				
+				const loader002 = new OBJLoader();
+				// load a resource
+				loader002.load('models/obj/conveyor.obj',function ( object ) {
+						object.scale.x = 0.03;
+						object.scale.y = 0.025;
+						object.scale.z = 0.0215;
+						
+						
+						object.position.x = 2.82;
+						object.position.y = 0;
+						object.position.z = -1.46;
+						
+						object.rotation.x = -1.57;
+						object.rotation.y = 0.00;
+						object.rotation.z = 1.56;
+
+						scene.add( object );
+				});
+				
+				const loader004 = new OBJLoader();
+				// load a resource
+				loader004.load('models/obj/workbench.obj',function ( object ) {
+						
+						object.scale.x = 0.01;
+						object.scale.y = 0.025;
+						object.scale.z = 0.0215;
+						
+						
+						object.position.x = -0.1;
+						object.position.y = 0;
+						object.position.z = 7;
+						
+						object.rotation.x = -1.57;
+						object.rotation.y = 0;
+						object.rotation.z = -1.56;
+
+						scene.add( object );
+				});
+				
+				const loader005 = new OBJLoader();
+				// load a resource
+				loader005.load('models/obj/box.obj',function ( object ) {
+				
+					box = object;
+					box.scale.x = 0.01;
+					box.scale.y = 0.015;
+					box.scale.z = 0.01;
+					
+					//box.position.x = 0;
+					//box.position.y = 0;
+					//box.position.z = 0;
+						
+						
+					box.position.x = -0.1;
+					box.position.y = 1;
+					box.position.z = 6.7;
+						
+					box.rotation.x = -1.57;
+					box.rotation.y = 0;
+					box.rotation.z = -1.56;
+
+					scene.add( box );
+				});
+				
+				const loader006 = new OBJLoader();
+				// load a resource
+				loader005.load('models/obj/newBox.obj',function ( object ) {
+				
+					newBox = object;
+					newBox.scale.x = 0.018;
+					newBox.scale.y = 0.015;
+					newBox.scale.z = 0.026;
+					
+					//box.position.x = 0;
+					//box.position.y = 0;
+					//box.position.z = 0;
+						
+						
+					newBox.position.x = 2.8;
+					newBox.position.y = 1.45;
+					//newBox.position.z = 5.7;
+					newBox.position.z = 4.1;
+						
+					newBox.rotation.x = -1.57;
+					newBox.rotation.y = -1.56;
+					newBox.rotation.z = -1.56;
+
+					scene.add( newBox );
+				});
+				
+				
+				
+			
+				
+
+				container = document.createElement( 'div' );
+				document.body.appendChild( container );
+
+				camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 2000 );
+				camera.position.set( 2, 2, 3 );
+
+				scene = new THREE.Scene();
+
+				// Grid
+
+				const grid = new THREE.GridHelper( 20, 20, 0x888888, 0x444444 );
+				scene.add( grid );
+
+				// Add the COLLADA
+				
+				
+
+				
+
+				particleLight = new THREE.Mesh( new THREE.SphereGeometry( 4, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0xffffff } ) );
+				scene.add( particleLight );
+
+				// Lights
+
+				const light = new THREE.HemisphereLight( 0xffeeee, 0x111122 );
+				scene.add( light );
+
+				const pointLight = new THREE.PointLight( 0xffffff, 0.3 );
+				particleLight.add( pointLight );
+
+				renderer = new THREE.WebGLRenderer();
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+
+				stats = new Stats();
+				container.appendChild( stats.dom );
+
+				controls = new OrbitControls( camera, renderer.domElement );
+				controls.enablePan = true;
+				controls.enableDamping = true;
+				
+				
+
+				dragcontrols = new DragControls( [ ... robot ], camera, renderer.domElement );
+				dragcontrols.addEventListener( 'drag', render );
+				//
+
+				window.addEventListener( 'resize', onWindowResize );
+
+			}
+
+			
+			function setupTween() {
+
+				const duration = THREE.MathUtils.randInt( 1000, 5000 );
+
+				const target = {};
+				
+				//console.log(kinematics);
+
+				for ( const prop in kinematics.joints ) {
+
+					if ( kinematics.joints.hasOwnProperty( prop ) ) {
+
+						if ( ! kinematics.joints[ prop ].static ) {
+
+							const joint = kinematics.joints[ prop ];
+
+							const old = tweenParameters[ prop ];
+
+							const position = old ? old : joint.zeroPosition;
+
+							tweenParameters[ prop ] = position;
+
+							target[ prop ] = THREE.MathUtils.randInt( joint.limits.min, joint.limits.max );
+
+						}
+
+					}
+
+				}
+
+				kinematicsTween = new TWEEN.Tween( tweenParameters ).to( target, duration ).easing( TWEEN.Easing.Quadratic.Out );
+
+				kinematicsTween.onUpdate( function ( object ) {
+
+					for ( const prop in kinematics.joints ) {
+
+						if ( kinematics.joints.hasOwnProperty( prop ) ) {
+
+							if ( ! kinematics.joints[ prop ].static ) {
+
+								kinematics.setJointValue( prop, object[ prop ] );
+
+							}
+
+						}
+
+					}
+
+				} );
+
+				kinematicsTween.start();
+
+				setTimeout( setupTween, duration );
+
+			}
+			
+			var index = 0;
+			var prop = "joint_1";
+			var nextProp = "joint_1";
+			var boxIndex = 0;
+			
+			function setupTween01() {
+
+				const duration = THREE.MathUtils.randInt( 1000, 5000 );
+
+				const target = {};
+				
+				//console.log(kinematics01.joints);
+
+				//取得各關節，此for回圈主要為設定各關節從哪移到哪
+				//joint_1機身;-180~180;target[ prop ]-->順時鐘負的;逆時鐘正的
+				//joint_2第一手臂;-63~109;target[ prop ]-->下正的;上負的
+				//joint_3第二手臂;-235~55;target[ prop ]-->下正的;上負的
+				//joint_4第三手臂;-200~200;target[ prop ]-->順時鐘負的;逆時鐘正的
+				//joint_5第四手臂;小黑點吸器;-114~114;target[ prop ]-->下正的;上負的
+				//joint_6小黑點吸器旋轉;-400~400;target[ prop ]-->順時鐘負的;逆時鐘正的
+				//for ( const prop1 in kinematics01.joints ) {
+				
+					
+					//prop = "joint_1";
+					prop = nextProp;
+				
+				
+					//使用 hasOwnProperty 測試屬性是否存在
+					if ( kinematics01.joints.hasOwnProperty( prop ) ) {
+						
+						//判斷關節的參數static是否為false(false表非靜止)
+						if ( ! kinematics01.joints[ prop ].static ) {
+						
+							const joint = kinematics01.joints[ prop ];
+							
+							const old = tweenParameters[ prop ];
+
+							//判斷是否為undefined?不是為old，是為joint.zeroPosition
+							const position = old ? old : joint.zeroPosition;
+							
+							tweenParameters[ prop ] = position;
+							
+							//由joint.limits.min至joint.limits.max之間亂數取一值
+							//target[ prop ] = THREE.MathUtils.randInt( joint.limits.min, joint.limits.max );
+							
+							//joint_1機身左轉到-90
+							if(index==0){
+								newBox.position.z = 4.1;
+								target[ prop ] = -90;
+								nextProp = "joint_5";
+								index=1;
+							//joint_5小黑點吸器向下;
+							}else if(index==1){
+								target[ prop ] = 44;
+								nextProp = "joint_2";
+								index=2;
+							//joint_2第一手臂向下;
+							}else if(index==2){
+								target[ prop ] = 43.5;
+								nextProp = "joint_2";
+								index=3;
+							//joint_2第一手臂向上;
+							}else if(index==3){
+								target[ prop ] = 0;
+								nextProp = "joint_1";
+								index=4;
+							//joint_1機身右轉到0	
+							}else if(index==4){
+								target[ prop ] = 0;
+								nextProp = "joint_2";
+								index=5;
+							//joint_2第一手臂向下;
+							}else if(index==5){
+								target[ prop ] = 31;
+								nextProp = "joint_2";
+								index=6;
+							//joint_2第一手臂向上;
+							}else if(index==6){
+								target[ prop ] = 0;
+								nextProp = "joint_1";
+								index=7;
+							}else if(index==7){
+							
+								index=0;
+								
+							}
+
+							//target[ prop ] = 0;
+
+						}
+
+					}
+
+				//}
+				
+				//new TWEEN.Tween(coords) 建立新的 Tween 物件來改變 coords
+				//.to({ x: 300, y: 200 }, 1000) // 在 1000ms 內移動至（300, 200）
+				//.easing(TWEEN.Easing.Quadratic.Out) // 補間動畫效果
+				//.onUpdate(function() { // 在 coords 被改變時會執行的 callback function
+				//使用 onUpdate 函式來執行當座標值有改變時需要做的相對應修改
+				kinematicsTween01 = new TWEEN.Tween( tweenParameters ).to( target, duration ).easing( TWEEN.Easing.Quadratic.Out );
+				kinematicsTween01.onUpdate( function ( object ) {
+					for ( const prop1 in kinematics01.joints ) {
+					
+						
+					
+						//var prop = "joint_1";
+
+						if ( kinematics01.joints.hasOwnProperty( prop ) ) {
+
+							if ( ! kinematics01.joints[ prop ].static ) {
+							
+								kinematics01.setJointValue( prop, object[ prop ] );
+								if(index==1){
+									//newBox.position.z = newBox.position.z - 0.002;
+								}else if(index==2){
+									
+									//newBox.position.z = 4.1;
+									
+								}else if(index==4){
+									
+									//link5Child.attach(box);
+									
+								}else if(index==7){
+									
+									//link5Child.remove();
+									newBox.attach( box );
+									newBox.position.z = newBox.position.z - 0.002;
+									
+									
+								}
+								
+								
+							}
+
+						}
+
+					}
+
+				} );
+
+				kinematicsTween01.start();
+				
+				//
+
+				setTimeout( setupTween01, 5000 );
+				//setTimeout( setupTween01, duration );
+
+			}
+			
+
+			function onWindowResize() {
+
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				stats.update();
+				TWEEN.update();
+
+			}
+
+			function render() {
+
+				const timer = 1 * 0.0001;
+
+				//camera.position.x = 40;
+				//camera.position.y = 2;
+				//camera.position.z = Math.sin( timer ) * 20;
+
+				camera.lookAt( 0, 5, 0 );
+
+				particleLight.position.x = Math.sin( timer * 4 ) * 3009;
+				particleLight.position.y = Math.cos( timer * 5 ) * 4000;
+				particleLight.position.z = Math.cos( timer * 4 ) * 3009;
+				
+				controls.update();
+
+				renderer.render( scene, camera );
+
+			}
+		
+		</script>
+	</body>
+</html>
