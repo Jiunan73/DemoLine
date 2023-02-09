@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="Z02">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.0351488286721654 -0.0010622914192712 0.05732189697876"
+        rpy="0 0 0" />
+      <mass
+        value="0.341305928820693" />
+      <inertia
+        ixx="0.000360995650954712"
+        ixy="-2.94457431365275E-11"
+        ixz="-3.27882088977825E-10"
+        iyy="0.000217752419440063"
+        iyz="-4.14495724536827E-07"
+        izz="0.000332198989687869" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Z02/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Z02/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="R_Link">
+    <inertial>
+      <origin
+        xyz="0.0014600275640089 0.0306095757707915 0.0191514762265022"
+        rpy="0 0 0" />
+      <mass
+        value="0.00789862123815668" />
+      <inertia
+        ixx="1.38355549727619E-06"
+        ixy="5.6403999054981E-08"
+        ixz="2.21491316498542E-07"
+        iyy="1.56971031815804E-06"
+        iyz="-3.72182518762796E-08"
+        izz="4.23330248524547E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Z02/meshes/R_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Z02/meshes/R_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="R_joint"
+    type="prismatic">
+    <origin
+      xyz="0.035149 -0.05457 0.057277"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="R_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-0.03"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="L_Link">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Z02/meshes/L_Link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Z02/meshes/L_Link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="L_joint"
+    type="prismatic">
+    <origin
+      xyz="0.035149 -0.05457 0.057277"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="L_Link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0.03"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>
