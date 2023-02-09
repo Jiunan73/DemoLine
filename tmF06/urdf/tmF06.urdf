@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="tmF06">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.0398421019416446 -4.32564189552617E-05 -1.48514635881769E-05"
+        rpy="0 0 0" />
+      <mass
+        value="0.0848757789777957" />
+      <inertia
+        ixx="3.63171215506554E-05"
+        ixy="1.10722378083938E-07"
+        ixz="4.05900756811043E-08"
+        iyy="8.07037822008396E-05"
+        iyz="5.45259939296919E-11"
+        izz="8.04730937818987E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="AKE">
+    <inertial>
+      <origin
+        xyz="0.0914651645111982 0.000479455366529743 -0.00189335285915867"
+        rpy="0 0 0" />
+      <mass
+        value="0.0590242532705572" />
+      <inertia
+        ixx="3.18527095100942E-05"
+        ixy="1.72512364360481E-07"
+        ixz="3.91248939799136E-07"
+        iyy="2.87397645096793E-05"
+        iyz="-5.45619982968746E-08"
+        izz="2.48658577044853E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/AKE.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.741176470588235 0.741176470588235 0.741176470588235 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/AKE.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="AKE"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="AKE" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="TMF_J1">
+    <inertial>
+      <origin
+        xyz="-0.0161973112050794 0.0728866304639082 -0.0199346346390931"
+        rpy="0 0 0" />
+      <mass
+        value="1.64416195967455" />
+      <inertia
+        ixx="0.00792270442132492"
+        ixy="-1.00267916514695E-05"
+        ixz="-1.08513569422948E-05"
+        iyy="0.00932926621899306"
+        iyz="-0.00238885375918226"
+        izz="0.00893650238669853" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/TMF_J1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.741176470588235 0.741176470588235 0.741176470588235 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/TMF_J1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="TMF_J1"
+    type="revolute">
+    <origin
+      xyz="0.104 -0.01635 0"
+      rpy="1.5708 0 -1.5708" />
+    <parent
+      link="AKE" />
+    <child
+      link="TMF_J1" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-90"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="L_F">
+    <inertial>
+      <origin
+        xyz="0.0306095757679273 -0.0018400275611248 0.0199514762241413"
+        rpy="0 0 0" />
+      <mass
+        value="0.00789862123633928" />
+      <inertia
+        ixx="1.56971031786536E-06"
+        ixy="-5.6403999208589E-08"
+        ixz="-3.72182514535903E-08"
+        iyy="1.38355549710685E-06"
+        iyz="-2.21491316849311E-07"
+        izz="4.23330248245995E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/L_F.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/L_F.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="L_joint"
+    type="prismatic">
+    <origin
+      xyz="-0.01635 0 -0.1445"
+      rpy="-3.1416 0 -3.1416" />
+    <parent
+      link="TMF_J1" />
+    <child
+      link="L_F" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="0"
+      upper="0.03"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="R_F">
+    <inertial>
+      <origin
+        xyz="-0.0306095757679276 0.00184002756112005 0.0199514762241417"
+        rpy="0 0 0" />
+      <mass
+        value="0.00789862123633926" />
+      <inertia
+        ixx="1.56971031786536E-06"
+        ixy="-5.64039992085986E-08"
+        ixz="3.72182514535738E-08"
+        iyy="1.38355549710674E-06"
+        iyz="2.21491316849565E-07"
+        izz="4.23330248246111E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/R_F.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://tmF06/meshes/R_F.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="R_joint"
+    type="prismatic">
+    <origin
+      xyz="-0.01635 0 -0.1445"
+      rpy="-3.1416 0 -3.1416" />
+    <parent
+      link="TMF_J1" />
+    <child
+      link="R_F" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-0.03"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+</robot>
