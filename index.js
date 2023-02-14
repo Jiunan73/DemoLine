@@ -42,7 +42,13 @@ const controlsel = document.getElementById('controls');
 const controlsToggle = document.getElementById('toggle-controls');
 const animToggle = document.getElementById('do-animate');
 const togglefinger = document.getElementById('toggle-finger');
-const addval = document.getElementById('addval');
+const addx = document.getElementById('addx');
+const subx = document.getElementById('subx');
+const addy = document.getElementById('addy');
+const suby = document.getElementById('suby');
+const addz = document.getElementById('addz');
+const subz = document.getElementById('subz');
+const showxyz = document.getElementById('showxyz');
 const DEG2RAD = Math.PI / 180;
 const RAD2DEG = 1 / DEG2RAD;
 let sliders = {};
@@ -50,7 +56,7 @@ var arm6mesh;
 var finger1mesh;
 var finger2mesh;
 var finger2mesh_flag=false;
-
+var urdffile;
 // Global Functions
 const setColor = color => {
 
@@ -97,22 +103,7 @@ init();
 					});
 				const loader001 = new OBJLoader();
 				// load a resource
-				loader001.load('../../../../robot/examples/models/obj/conveyor.obj',function ( object ) {
-						object.scale.x = 0.01;
-						object.scale.y = 0.01;
-						object.scale.z = 0.01;
-						
-						
-						object.position.x = 1;
-						object.position.y = 0;
-						object.position.z = 0;
-						
-						object.rotation.x = -1.57;
-						object.rotation.y = 0.00;
-						object.rotation.z = 1.56;
 
-						viewer.scene.add( object );
-				});
 				
 				
 				console.log(viewer.robot);
@@ -146,7 +137,71 @@ init();
 					
 
 					});
-	
+					console.log("123");
+					console.log(viewer.scene);
+				loader1.load('../../../staubli_base/urdf/staubli_base.urdf', object => {
+					//object.scale.x = object.scale.y = object.scale.z = 1;
+					// The robot is loaded!
+					object.position.x =-0.52;
+					object.position.y = 0.66 ;
+					object.position.z = 1.12;
+					
+					object.rotation.x = -Math.PI/2 ;
+					object.rotation.z = Math.PI/2 ;
+					viewer.scene.add( object );
+					//urdffile=object;
+
+					});	
+					loader1.load('../../../TM_FANUC_BASE/urdf/TM_FANUC_BASE.urdf', object => {
+					//object.scale.x = object.scale.y = object.scale.z = 1;
+					// The robot is loaded!
+					object.position.x =0;
+					object.position.y = -0.22 ;
+					object.position.z = -0.75;
+					
+					object.rotation.x = -Math.PI/2 ;
+					object.rotation.z = Math.PI/2 ;
+					viewer.scene.add( object );
+					//urdffile=object;
+
+					});	
+					
+					loader1.load('../../../cv13/urdf/cv13.urdf', object => {
+					//object.scale.x = object.scale.y = object.scale.z = 1;
+					// The robot is loaded!
+					
+					object.position.x =0.87;
+					object.position.y = 0.6 ;
+					object.position.z = -0.16;
+					
+					object.rotation.x = -Math.PI/2 ;
+					
+					//object.rotation.z = Math.PI/2 ;
+				
+				
+					
+					viewer.scene.add( object );
+					
+					});	
+					loader1.load('../../../cv13/urdf/cv13.urdf', object => {
+					//object.scale.x = object.scale.y = object.scale.z = 1;
+					// The robot is loaded!
+					
+					object.position.x =0.87;
+					object.position.y = 0.6 ;
+					object.position.z = -2;
+					
+					object.rotation.x = -Math.PI/2 ;
+					
+					//object.rotation.z = Math.PI/2 ;
+				
+				
+					
+					viewer.scene.add( object );	
+					urdffile=object;
+					
+					});	
+			//viewer.robot.set
 	
 	}
 			
@@ -172,14 +227,34 @@ togglefinger.addEventListener('click', () => {
 				
 	
 });
-addval.addEventListener('click', () => {
-	//viewer.robot.position.set(0,0,0.8);
-    addval.classList.toggle('checked');
-	//finger2mesh.position.y+=0.5;
-	//finger2mesh.position.set(finger2mesh.position.x+0.01, finger2mesh.position.y, finger2mesh.position.z);
-	console.log(finger2mesh);
-    viewer.addval = addval.classList.contains('checked');
+
+addx.addEventListener('click', () => {
+    urdffile.position.x+=0.01;
 	viewer.renderer.render( viewer.scene, viewer.camera );
+});
+addy.addEventListener('click', () => {
+    urdffile.position.y+=0.01;
+	viewer.renderer.render( viewer.scene, viewer.camera );
+});
+addz.addEventListener('click', () => {
+    urdffile.position.z+=0.01;
+	viewer.renderer.render( viewer.scene, viewer.camera );
+});
+subx.addEventListener('click', () => {
+    urdffile.position.x-=0.01;
+	viewer.renderer.render( viewer.scene, viewer.camera );
+});
+suby.addEventListener('click', () => {
+    urdffile.position.y-=0.01;
+	viewer.renderer.render( viewer.scene, viewer.camera );
+});
+subz.addEventListener('click', () => {
+    urdffile.position.z-=0.01;
+	viewer.renderer.render( viewer.scene, viewer.camera );
+});
+showxyz.addEventListener('click', () => {
+    alert(urdffile.position.x+","+urdffile.position.y+","+urdffile.position.z);
+
 });
 limitsToggle.addEventListener('click', () => {
     limitsToggle.classList.toggle('checked');
@@ -435,12 +510,12 @@ document.addEventListener('WebComponentsReady', () => {
     }
 	console.log('test');
 	console.log(viewer);
-    /*registerDragEvents(viewer, () => {
+    registerDragEvents(viewer, () => {
 		
         setColor('#263238');
         animToggle.classList.remove('checked');
         updateList();
-    });*/
+    });
 	
 });
 
@@ -462,6 +537,7 @@ const updateAngles = () => {
         const ratio = Math.max(0, Math.sin(time + offset));
 		
         viewer.setJointValue(`j1`, THREE.MathUtils.lerp(30, 0, ratio) * DEG2RAD);
+		viewer.setJointValue(`joint_1`, THREE.MathUtils.lerp(30, 0, ratio) * DEG2RAD);
 		if (finger2mesh_flag)
 		{
 			for (let i = 1; i <= 5; i++) {
@@ -519,7 +595,7 @@ document.addEventListener('WebComponentsReady', () => {
     // stop the animation if user tried to manipulate the model
     viewer.addEventListener('manipulate-start', e => animToggle.classList.remove('checked'));
     viewer.addEventListener('urdf-processed', e => updateAngles());
-    //updateLoop();
+    updateLoop();
     viewer.camera.position.set(-5.5, 3.5, 5.5);
 	console.log(viewer);
 	
