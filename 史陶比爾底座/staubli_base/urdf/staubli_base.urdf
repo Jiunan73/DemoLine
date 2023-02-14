@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="staubli_base">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.111070040734981 -0.0263083680910117 0.511518066089805"
+        rpy="0 0 0" />
+      <mass
+        value="6.6818864715558" />
+      <inertia
+        ixx="0.461151461456338"
+        ixy="1.7577952982073E-14"
+        ixz="1.30515780474849E-12"
+        iyy="0.425819887245365"
+        iyz="-0.00724182668878166"
+        izz="0.551954923395766" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://staubli_base/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.52156862745098 0.541176470588235 0.541176470588235 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://staubli_base/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

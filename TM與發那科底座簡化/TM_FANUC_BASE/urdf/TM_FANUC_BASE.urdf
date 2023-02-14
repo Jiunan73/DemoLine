@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="TM_FANUC_BASE">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-0.0216349968386468 0.837049847281741 -0.000621796854663875"
+        rpy="0 0 0" />
+      <mass
+        value="15.6445809988323" />
+      <inertia
+        ixx="1.82798149420973"
+        ixy="0.041709473171783"
+        ixz="0.00380015577232911"
+        iyy="2.69047316465091"
+        iyz="-0.00238910484886091"
+        izz="2.72672812134187" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://TM_FANUC_BASE/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://TM_FANUC_BASE/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
