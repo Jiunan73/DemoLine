@@ -187,12 +187,12 @@ init();
 					//object.scale.x = object.scale.y = object.scale.z = 1;
 					// The robot is loaded!
 					
-					object.position.x =0.87;
-					object.position.y = 0.6 ;
-					object.position.z = -2;
+					object.position.x =0.78;
+					object.position.y = 0.51 ;
+					object.position.z = 0.56;
 					
 					object.rotation.x = -Math.PI/2 ;
-					
+					object.rotation.z = -Math.PI
 					//object.rotation.z = Math.PI/2 ;
 				
 				
