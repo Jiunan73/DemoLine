@@ -129,8 +129,8 @@ init();
 					//object.scale.x = object.scale.y = object.scale.z = 1;
 					// The robot is loaded!
 					object.position.x =0.0;
-					object.position.y = 0.8 ;
-					object.position.z = -1;
+					object.position.y = 0.78 ;
+					object.position.z = -1.4;
 					
 					object.rotation.x = -Math.PI/2 ;
 					viewer.scene.add( object );
@@ -156,8 +156,8 @@ init();
 					//object.scale.x = object.scale.y = object.scale.z = 1;
 					// The robot is loaded!
 					object.position.x =0;
-					object.position.y = -0.22 ;
-					object.position.z = -0.75;
+					object.position.y = -0.26 ;
+					object.position.z = -1.18;
 					
 					object.rotation.x = -Math.PI/2 ;
 					object.rotation.z = Math.PI/2 ;
@@ -165,14 +165,26 @@ init();
 					//urdffile=object;
 
 					});	
+					loader1.load('../../../TM_FANUC_BASE/urdf/TM_FANUC_BASE.urdf', object => {
+					//object.scale.x = object.scale.y = object.scale.z = 1;
+					// The robot is loaded!
+					object.position.x =0;
+					object.position.y = -0.26 ;
+					object.position.z = -0.18;
 					
+					object.rotation.x = -Math.PI/2 ;
+					object.rotation.z = -Math.PI/2 ;
+					viewer.scene.add( object );
+					urdffile=object;
+
+					});	
 					loader1.load('../../../cv13/urdf/cv13.urdf', object => {
 					//object.scale.x = object.scale.y = object.scale.z = 1;
 					// The robot is loaded!
 					
 					object.position.x =0.87;
-					object.position.y = 0.6 ;
-					object.position.z = -0.16;
+					object.position.y = 0.45 ;
+					object.position.z = -0.46;
 					
 					object.rotation.x = -Math.PI/2 ;
 					
@@ -188,8 +200,8 @@ init();
 					// The robot is loaded!
 					
 					object.position.x =0.78;
-					object.position.y = 0.51 ;
-					object.position.z = 0.56;
+					object.position.y = 0.45 ;
+					object.position.z = 0.26;
 					
 					object.rotation.x = -Math.PI/2 ;
 					object.rotation.z = -Math.PI
@@ -198,10 +210,10 @@ init();
 				
 					
 					viewer.scene.add( object );	
-					urdffile=object;
+					//urdffile=object;
 					
 					});	
-			//viewer.robot.set
+					
 	
 	}
 			
@@ -229,6 +241,7 @@ togglefinger.addEventListener('click', () => {
 });
 
 addx.addEventListener('click', () => {
+	
     urdffile.position.x+=0.01;
 	viewer.renderer.render( viewer.scene, viewer.camera );
 });
@@ -342,7 +355,7 @@ viewer.addEventListener('manipulate-end', e => {
 
 // create the sliders
 viewer.addEventListener('urdf-processed', () => {
-
+	viewer.robot.position.z=0.8;
     const r = viewer.robot;
 		viewer.robot.traverse( function ( child ) {
 						
@@ -549,6 +562,8 @@ const updateAngles = () => {
 		{
 			finger2mesh.setJointValue(`L_joint`, THREE.MathUtils.lerp(0, 0.03, ratio) );
 			finger2mesh.setJointValue(`R_joint`, THREE.MathUtils.lerp(0, -0.03, ratio) );
+			finger2mesh.setJointValue(`TMF_J1`, THREE.MathUtils.lerp(-90, 0, ratio) * DEG2RAD );
+			
 		}
 
 
@@ -596,6 +611,8 @@ document.addEventListener('WebComponentsReady', () => {
     viewer.addEventListener('manipulate-start', e => animToggle.classList.remove('checked'));
     viewer.addEventListener('urdf-processed', e => updateAngles());
     updateLoop();
+	
+	
     viewer.camera.position.set(-5.5, 3.5, 5.5);
 	console.log(viewer);
 	
