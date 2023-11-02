@@ -1,0 +1,47 @@
+<?php
+session_start();
+include('DB_Function.php');
+include('Data_Function.php');
+include('DB_Login.php');
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="refresh" content="30" />
+</head>
+<body>
+<?php
+	$data=array(1001,1002,8002,3003,9002,2001,7001,5075,3004,3004,3004,1003,1003,1003,1078,2078,3003,5001);
+		
+		$Query="SELECT COUNT( * ),2
+FROM `agv_cmd_list`
+WHERE `AGVNo` =1";
+	$Result=MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password,'agv',"SELECT",$Query);
+		echo $Result[1][0].'<br>'.date("Y-m-d h:m:s").'<br>';
+		if ($Result[1][0]<3)
+		{
+		$randomIndex = array_rand($data);
+
+// 使用选定的索引获取随机值
+		$randomValue = $data[$randomIndex];
+
+		$Query="INSERT INTO `agv`.`agv_cmd_list` (`CmdKey`, `MaxLoad`, `AGVNo`, `CmdFrom`, `CmdTo`, `step_i`, `CMD_status`, `CMD_Response`, `Pri_Wt`, `RequestTime`, `RequestDeptNo`, `Requestor`, `RequestName`, `SubCmd`, `cmd_cnt`, `Shelf_Car_No`, `Shelf_Car_type`, `Shelf_Car_Size`, `RollData`, `ext_cmd`, `McsCmdKey`) 
+		VALUES (NULL, '', '1', '1', '".$randomValue ."', '', '', '', '50', now(), '', 'loader', '', '', '', '', '', '', '', '', '');";
+		
+		$Result=MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password,'agv',"INSERT",$Query);
+		echo $Query.$Result;
+		}
+
+
+
+
+
+
+
+
+
+?>   
+ <h1>AGV loader</h1>
+    <!-- 此处放置页面内容 -->
+</body>
+</html>
