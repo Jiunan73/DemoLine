@@ -25,3 +25,79 @@ INSERT INTO `battery` (`flag`, `SerialNo`, `CarNo`, `SOH`, `CHG_AH`, `DSG_AH`, `
 (0, '084-21224100021', 9001, 100, 2408, 2657, 3, '2024-01-24 01:32:00', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (0, '088-21223000002', 3, 100, 0, 0, 0, '2024-01-24 01:30:07', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (0, 'HIK_6680', 6680, 100, 0, 0, 0, '2024-01-24 01:51:30', '0000-00-00 00:00:00', '', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+
+
+CREATE TABLE IF NOT EXISTS `battery_history` (
+  `cmdkey` int(11) NOT NULL,
+  `SerialNo` varchar(30) NOT NULL,
+  `CarNo` int(11) NOT NULL,
+  `Charger_time` datetime NOT NULL,
+  `End_time` datetime NOT NULL,
+  `Start_SOC` int(11) NOT NULL,
+  `End_SOC` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+                                $Query='update `battery_history` A,agv_list B 
+                                set A.End_SOC=B.SOC1,A.`End_time`=now() 
+                                WHERE A.`SerialNo`=B.`bat_SN1` and A.cmdkey=B.cmdkey and B.CarWork=48';
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                
+                                $Query='update `battery_history` A,agv_list B 
+                                set A.End_SOC=B.SOC2,A.`End_time`=now() 
+                                WHERE A.`SerialNo`=B.`bat_SN2` and A.cmdkey=B.cmdkey and B.CarWork=48';
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+
+
+
+                                $Query="INSERT INTO battery_history (`cmdkey`,`SerialNo`,`CarNo`,`Charger_time`,End_time,`Start_SOC`,End_SOC)
+                                SELECT `cmdkey`,`bat_SN1`,AGVNo,now(),now(),SOC1,SOC1
+                                FROM agv_list
+                                WHERE concat(`bat_SN1`,`cmdkey`) NOT IN (SELECT concat(`SerialNo`,`cmdkey`) FROM battery_history)  and `CarWork`=48";
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';     
+                                $Query="INSERT INTO battery_history (`cmdkey`,`SerialNo`,`CarNo`,`Charger_time`,End_time,`Start_SOC`,End_SOC)
+                                SELECT `cmdkey`,`bat_SN2`,AGVNo,now(),now(),SOC2,SOC2
+                                FROM agv_list
+                                WHERE concat(`bat_SN2`,`cmdkey`) NOT IN (SELECT concat(`SerialNo`,`cmdkey`) FROM battery_history)  and `CarWork`=48";
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';
+
+
+
+                                $Query="INSERT INTO battery_history (`cmdkey`,`SerialNo`,`CarNo`,`Charger_time`,End_time,`Start_SOC`,End_SOC)
+                                SELECT `cmdkey`,`bat_SN1`,AGVNo,now(),now(),SOC1,SOC1
+                                FROM agv_list
+                                WHERE concat(`bat_SN1`,`cmdkey`) NOT IN (SELECT concat(`SerialNo`,`cmdkey`) FROM battery_history)  and `CarWork`=48";
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';     
+                                $Query="INSERT INTO battery_history (`cmdkey`,`SerialNo`,`CarNo`,`Charger_time`,End_time,`Start_SOC`,End_SOC)
+                                SELECT `cmdkey`,`bat_SN2`,AGVNo,now(),now(),SOC2,SOC2
+                                FROM agv_list
+                                WHERE concat(`bat_SN2`,`cmdkey`) NOT IN (SELECT concat(`SerialNo`,`cmdkey`) FROM battery_history)  and `CarWork`=48";
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';
+
+                                $Query='update `battery_history` A,agv_list B 
+                                set A.End_SOC=B.SOC1,A.`End_time`=now() 
+                                WHERE A.`SerialNo`=B.`bat_SN1` and A.cmdkey=B.cmdkey and B.CarWork=48';
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                
+                                $Query='update `battery_history` A,agv_list B 
+                                set A.End_SOC=B.SOC2,A.`End_time`=now() 
+                                WHERE A.`SerialNo`=B.`bat_SN2` and A.cmdkey=B.cmdkey and B.CarWork=48';
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+
+
+                                $Query="INSERT INTO battery_history (`cmdkey`,`SerialNo`,`CarNo`,`Charger_time`,End_time,`Start_SOC`,End_SOC)
+                                SELECT `cmdkey`,`bat_SN1`,AGVNo,now(),now(),SOC1,SOC1
+                                FROM agv_list
+                                WHERE concat(`bat_SN1`,`cmdkey`) NOT IN (SELECT concat(`SerialNo`,`cmdkey`) FROM battery_history)  and `CarWork`=48";
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';     
+                                $Query="INSERT INTO battery_history (`cmdkey`,`SerialNo`,`CarNo`,`Charger_time`,End_time,`Start_SOC`,End_SOC)
+                                SELECT `cmdkey`,`bat_SN2`,AGVNo,now(),now(),SOC2,SOC2
+                                FROM agv_list
+                                WHERE concat(`bat_SN2`,`cmdkey`) NOT IN (SELECT concat(`SerialNo`,`cmdkey`) FROM battery_history)  and `CarWork`=48";
+                                $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';
