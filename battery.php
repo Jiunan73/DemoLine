@@ -101,3 +101,26 @@ CREATE TABLE IF NOT EXISTS `battery_history` (
                                 WHERE concat(`bat_SN2`,`cmdkey`) NOT IN (SELECT concat(`SerialNo`,`cmdkey`) FROM battery_history)  and `CarWork`=48";
                                 $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
                                 echo $Query.":".$Result .'<br>';
+
+
+
+                                $Query="INSERT INTO battery (`SerialNo`,`CarNo`,`FirstTime`)
+                                                SELECT `bat_SN1`,`AGVNo`,now()
+                                                FROM agv_list
+                                                WHERE `bat_SN1` NOT IN (SELECT `SerialNo` FROM battery) ;";
+                               $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';     
+                                $Query="INSERT INTO battery (`SerialNo`,`CarNo`,`FirstTime`)
+                                                SELECT `bat_SN2`,`AGVNo`,now()
+                                                FROM agv_list
+                                                WHERE `bat_SN2` NOT IN (SELECT `SerialNo` FROM battery) ;";
+                               $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';             
+                                //更新電池訊息
+                                $Query='update `battery` A,agv_list B set A.`CHG_AH`=B.CHG_AH1,A.`DSG_AH`=B.`DSG_AH1`,A.`CYCLE`=B.`CYCLE1`,A.`SOH`=B.`SOH1` WHERE A.`SerialNo`=B.`bat_SN1` and B.`CYCLE1` >0';
+                               $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';
+                                $Query='update `battery` A,agv_list B set A.`CHG_AH`=B.CHG_AH2,A.`DSG_AH`=B.`DSG_AH2`,A.`CYCLE`=B.`CYCLE2`,A.`SOH`=B.`SOH2` WHERE A.`SerialNo`=B.`bat_SN2` and B.`CYCLE2` >0';
+                               $Result = MySQL_UTF8_Function($Local_Host, $Local_User, $Local_Password, 'agv', "UPDATE", $Query);
+                                echo $Query.":".$Result .'<br>';
+
