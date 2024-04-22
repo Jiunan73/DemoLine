@@ -1,0 +1,1 @@
+INSERT INTO `recycling`.`recyclingweights` (`RecyclingType`, `Site`, `Weights`, `UpdateTime`) VALUES ('', '', '', CURRENT_TIMESTAMP);
