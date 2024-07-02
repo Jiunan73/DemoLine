@@ -1,0 +1,18 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer Circle -->
+  <circle cx="100" cy="100" r="95" stroke="black" stroke-width="1" fill="none" />
+  <!-- Inner Circle -->
+  <circle cx="100" cy="100" r="15" stroke="black" stroke-width="1" fill="none" />
+  <!-- Arrow -->
+  <path d="M95 50 L100 40 L105 50" stroke="black" stroke-width="2" fill="none" />
+  <!-- Left Arrow -->
+  <path d="M60 110 A40 40 0 0 1 100 100" stroke="black" stroke-width="1" fill="none" />
+  <path d="M55 110 L65 110 L60 100 Z" fill="black" />
+  <!-- Right Arrow -->
+  <path d="M140 110 A40 40 0 0 0 100 100" stroke="black" stroke-width="1" fill="none" />
+  <path d="M145 110 L135 110 L140 100 Z" fill="black" />
+  <!-- Sections -->
+  <line x1="100" y1="5" x2="100" y2="85" stroke="black" stroke-width="1" />
+  <line x1="5" y1="100" x2="95" y2="100" stroke="black" stroke-width="1" />
+  <line x1="100" y1="100" x2="195" y2="100" stroke="black" stroke-width="1" />
+</svg>
